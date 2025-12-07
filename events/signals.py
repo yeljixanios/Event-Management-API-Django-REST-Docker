@@ -7,10 +7,13 @@ from .models import Registration
 
 @receiver(post_save, sender=Registration)
 def send_registration_email(sender, instance, created, **kwargs):
-    """
-    Відправляє email користувачу відразу після успішної реєстрації.
-    """
     if created:
+        user_email = instance.user.email
+
+        if not user_email:
+            print(f"⚠️  WARNING: Email notification skipped. User '{instance.user.username}' has no email address.")
+            return
+
         subject = f"Підтвердження реєстрації: {instance.event.title}"
         message = (
             f"Вітаємо, {instance.user.username}!\n\n"
@@ -20,11 +23,10 @@ def send_registration_email(sender, instance, created, **kwargs):
             f"Чекаємо на вас!"
         )
 
-        # Відправка листа (у консоль або на реальну пошту, залежно від налаштувань)
         send_mail(
             subject,
             message,
             settings.DEFAULT_FROM_EMAIL,
-            [instance.user.email],
+            [user_email],
             fail_silently=False,
         )

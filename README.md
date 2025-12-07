@@ -114,6 +114,7 @@ Since this is a test environment, the email backend is set to `console` to avoid
 
 **How to verify:**
 1.  Register a user for an event via the API.
+    **Important:** Ensure the user has a valid **email address** set.
 2.  Check the **Terminal/Logs** where `docker-compose` is running.
 3.  You will see the raw email text printed in the console.
 
