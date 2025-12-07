@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.py[cod]
+venv/
+env/
+.env
+
+db.sqlite3
+.idea/
+
+# Docker
+.pytest_cache/
