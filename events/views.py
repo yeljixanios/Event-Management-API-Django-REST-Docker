@@ -11,11 +11,7 @@ from .serializers import EventSerializer, RegistrationSerializer, UserRegistrati
 from .permissions import IsOrganizerOrReadOnly
 
 class EventViewSet(viewsets.ModelViewSet):
-    """
-    API для управління подіями (CRUD).
-    Також підтримує пошук та фільтрацію.
-    """
-    queryset = Event.objects.all()
+    queryset = Event.objects.all().select_related('organizer')
     serializer_class = EventSerializer
 
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOrganizerOrReadOnly]
@@ -40,7 +36,7 @@ class RegistrationViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'post', 'delete', 'head']
 
     def get_queryset(self):
-        return Registration.objects.filter(user=self.request.user)
+        return Registration.objects.filter(user=self.request.user).select_related('event', 'user')
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
